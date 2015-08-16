@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
@@ -62,4 +63,10 @@ public class Examples {
     public static List<String> foo(Parameters<ArrayList<String>> params) {
         return params.get().stream().map(s -> s + " foo").collect(toList());
     }
+    public static void foo(String aAparam) {
+        Function<String, String> f = bobBobBob -> "hello";
+        f.apply((String)(Object)5);
+    }
+
+
 }
