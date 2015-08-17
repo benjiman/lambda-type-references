@@ -17,7 +17,7 @@ public class PuppetExample {
                 "\n" +
                 "\tfile{\n" +
                 "\t\tname\t=> \"/etc/httpd/httpd.conf\",\n" +
-                "\t\tsource\t=> template(httpd.tpl),\n" +
+                "\t\tsource\t=> template(\"httpd.tpl\"),\n" +
                 "\t\towner\t=> root,\n" +
                 "\t\tgroup\t=> root,\n" +
                 "\t}\n" +
@@ -94,7 +94,7 @@ static class Apache extends PuppetClass {{
         }
 
         static PuppetLiteral template(String name) {
-            return new PuppetLiteral("template(" + name + ")");
+            return new PuppetLiteral("template(\"" + name + "\")");
         }
 
         static PuppetLiteral root = new PuppetLiteral("root");
