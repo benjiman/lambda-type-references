@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 public class PuppetExample {
 
+
     @Test
     public void puppet_example() {
         String manifest = new Apache().toString();
@@ -16,14 +17,14 @@ public class PuppetExample {
                 "\n" +
                 "\tfile{\n" +
                 "\t\tname\t=> \"/etc/httpd/httpd.conf\",\n" +
-                "\t\tsource\t=> \"template(httpd.tpl)\",\n" +
-                "\t\towner\t=> \"root\",\n" +
-                "\t\tgroup\t=> \"root\",\n" +
+                "\t\tsource\t=> template(httpd.tpl),\n" +
+                "\t\towner\t=> root,\n" +
+                "\t\tgroup\t=> root,\n" +
                 "\t}\n" +
                 "\tcron{\n" +
                 "\t\tname\t=> \"logrotate\",\n" +
                 "\t\tcommand\t=> \"/usr/sbin/logrotate\",\n" +
-                "\t\tuser\t=> \"root\",\n" +
+                "\t\tuser\t=> root,\n" +
                 "\t\thour\t=> \"2\",\n" +
                 "\t\tminute\t=> \"*/10\",\n" +
                 "\t}\n" +
@@ -34,22 +35,22 @@ public class PuppetExample {
     }
 
 
-    static class Apache extends PuppetClass {{
-        file(
-            name -> "/etc/httpd/httpd.conf",
-            source -> template("httpd.tpl"),
-            owner -> root,
-            group -> root
-        );
+static class Apache extends PuppetClass {{
+    file(
+        name -> "/etc/httpd/httpd.conf",
+        source -> template("httpd.tpl"),
+        owner -> root,
+        group -> root
+    );
 
-        cron (
-            name -> "logrotate",
-            command -> "/usr/sbin/logrotate",
-            user -> root,
-            hour -> "2",
-            minute -> "*/10"
-        );
-    }}
+    cron (
+        name -> "logrotate",
+        command -> "/usr/sbin/logrotate",
+        user -> root,
+        hour -> "2",
+        minute -> "*/10"
+    );
+}}
 
     interface PuppetParam<T> extends NamedValue<T> {
         default String asString() {
@@ -92,11 +93,11 @@ public class PuppetExample {
             return builder;
         }
 
-        static String template(String name) {
-            return "template(" + name + ")";
+        static PuppetLiteral template(String name) {
+            return new PuppetLiteral("template(" + name + ")");
         }
 
-        static String root = "root";
+        static PuppetLiteral root = new PuppetLiteral("root");
 
         @Override
         public String toString() {
@@ -104,6 +105,19 @@ public class PuppetExample {
             builder.append("\n\n}");
             return builder.toString();
 
+        }
+    }
+
+    static class PuppetLiteral {
+        String value;
+
+        public PuppetLiteral(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
         }
     }
 }
